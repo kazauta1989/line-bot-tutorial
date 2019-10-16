@@ -9,6 +9,7 @@ import os
 from events.about_us import about_us_event
 from line_bot_api import *
 from events.location import location_event
+from events.contact import contact_event
 
 app = Flask(__name__)
 
@@ -50,6 +51,8 @@ def handle_message(event):
         about_us_event(event)
     elif message_text == '＠地址':
         location_event(event)
+    elif message_text == '＠聯絡我們':
+        contact_event(event)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-# 從 line_bot_api import 全部到 app.py
+# 從 line_bot_api import 全部到 about_us.py
 from line_bot_api import *
 
 
