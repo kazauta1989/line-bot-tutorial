@@ -48,8 +48,14 @@ def callback():
 # 簡單說 handle_message(event)這個函式，做的就是使用者傳hi，機器人就回傳一樣的字
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = TextSendMessage(text=event.message.text)
-    line_bot_api.reply_message(event.reply_token, message)
+    # 當接收到訊息的時候，會先將訊息變換成小寫
+    message_text = str(event.message.text).lower()
+
+    if message_text == '＠關於我們':
+        about_us_text = '歡迎來到上上清潔家'
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=about_us_text))
 
 
 if __name__ == "__main__":
