@@ -48,7 +48,7 @@ def handle_message(event):
     # 多個Message objects時，要記得用成陣列，才會一次訊息同時送出
     if message_text == '＠關於我們':
         about_us_event(event)
-    elif message_text == '@地址':
+    elif message_text == '＠地址':
         location_event(event)
 
 
