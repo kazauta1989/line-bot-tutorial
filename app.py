@@ -1,23 +1,13 @@
 # import 所需套件
 from flask import Flask, request, abort
 
-from linebot import (
-    LineBotApi, WebhookHandler
-)
-from linebot.exceptions import (
-    InvalidSignatureError
-)
-from linebot.models import *
-
 import os
+# 從 events.about_us import about_us_event 到 app.py
+from events.about_us import about_us_event
+# 從 line_bot_api import 全部到 app.py
+from line_bot_api import *
 
 app = Flask(__name__)
-
-# Channel Access Token
-line_bot_api = LineBotApi(
-    '617X/r7VBmoBeh+guL9HTBkWQ10b7jRVZKPme8BQOqtjic8MPVfacmNE0EkB+rNigcDPsX0PvqNxam55wUuYIrudgWKTWhONJX5c4knZQS+8M0dre/vx24auZR5QZGUxIOPhT8ZpOihn7neASRPxxwdB04t89/1O/w1cDnyilFU=')
-# Channel Secret
-handler = WebhookHandler('681b3abaab63d98ea984dd76a7215b33')
 
 
 # 監聽所有來自 /callback 的 Post Request
@@ -54,14 +44,7 @@ def handle_message(event):
     # 另外，當有用到TextSendMessage、ImageSendMessage、VideoSendMessage、等等...
     # 多個Message objects時，要記得用成陣列，才會一次訊息同時送出
     if message_text == '＠關於我們':
-        about_us_text = '歡迎來到上上清潔家'
-        about_us_img = 'https://i.imgur.com/6bR33SV.png'
-    line_bot_api.reply_message(
-        event.reply_token,
-        [TextSendMessage(text=about_us_text),
-         ImageSendMessage(original_content_url=about_us_img, preview_image_url=about_us_img),
-         StickerSendMessage(package_id='11537', sticker_id='52002763')
-         ])
+        about_us_event(event)
 
 
 if __name__ == "__main__":
