@@ -5,8 +5,8 @@ from line_bot_api import *
 def location_event(event):
     title_text = '尚尚清潔家地址'
     address_text = '414台中市烏日區中華路385巷16號'
-    latitude = '24.1104783'
-    longitude = '120.63543,17'
+    latitude = 24.1104783
+    longitude = 120.63543,17
     line_bot_api.reply_message(
         event.reply_token,
         LocationSendMessage(
