@@ -3,7 +3,7 @@ from line_bot_api import *
 
 
 def about_us_event(event):
-    about_us_text = '歡迎來到上上清潔家'
+    about_us_text = '歡迎來到尚尚清潔家'
     about_us_img = 'https://i.imgur.com/6bR33SV.png'
     line_bot_api.reply_message(
         event.reply_token,
