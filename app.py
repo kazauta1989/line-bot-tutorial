@@ -50,12 +50,17 @@ def callback():
 def handle_message(event):
     # 當接收到訊息的時候，會先將訊息變換成小寫
     message_text = str(event.message.text).lower()
-
+    # 當message_text等同於'＠關於我們'時，會回傳line_bot_api.reply_message(）裡的值
+    # 另外，當有用到TextSendMessage、ImageSendMessage、VideoSendMessage、等等...
+    # 多個Message objects時，要記得用成陣列，才會一次訊息同時送出
     if message_text == '＠關於我們':
         about_us_text = '歡迎來到上上清潔家'
+        about_us_img = 'https://i.imgur.com/6bR33SV.png'
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=about_us_text))
+        [TextSendMessage(text=about_us_text),
+         ImageSendMessage(original_content_url=about_us_img, preview_image_url=about_us_img)
+         ])
 
 
 if __name__ == "__main__":
