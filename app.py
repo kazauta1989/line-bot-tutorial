@@ -1,3 +1,4 @@
+# import 所需套件
 from flask import Flask, request, abort
 
 from linebot import (
@@ -8,14 +9,20 @@ from linebot.exceptions import (
 )
 from linebot.models import *
 
+import os
+
 app = Flask(__name__)
 
 # Channel Access Token
-line_bot_api = LineBotApi('617X/r7VBmoBeh+guL9HTBkWQ10b7jRVZKPme8BQOqtjic8MPVfacmNE0EkB+rNigcDPsX0PvqNxam55wUuYIrudgWKTWhONJX5c4knZQS+8M0dre/vx24auZR5QZGUxIOPhT8ZpOihn7neASRPxxwdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi(
+    '617X/r7VBmoBeh+guL9HTBkWQ10b7jRVZKPme8BQOqtjic8MPVfacmNE0EkB+rNigcDPsX0PvqNxam55wUuYIrudgWKTWhONJX5c4knZQS+8M0dre/vx24auZR5QZGUxIOPhT8ZpOihn7neASRPxxwdB04t89/1O/w1cDnyilFU=')
 # Channel Secret
 handler = WebhookHandler('681b3abaab63d98ea984dd76a7215b33')
 
+
 # 監聽所有來自 /callback 的 Post Request
+# /callback路徑，到時候line所傳送的資料到WebhookUrl就會視為從這裡進來的
+# 所以他會取得signature 和 body
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -24,19 +31,27 @@ def callback():
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
     # handle webhook body
+    # 接著把signature 和 body 丟給handler去做處理
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
     return 'OK'
 
-# 處理訊息
+
+# 當handler接受到訊息之後，他會呼叫handle_message這個函式
+# 並把event這個物件給丟進來
+# 這event物件裡面包含token ： 是哪一個使用者傳送的訊息，以及傳送什麼訊息，都會在event物件裡面
+
+# 透過line_bot_api去回傳event物件裡面的token以及文字訊息
+# 擷取event的message.text訊息回傳給使用者
+# 簡單說 handle_message(event)這個函式，做的就是使用者傳hi，機器人就回傳一樣的字
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = TextSendMessage(text=event.message.text)
     line_bot_api.reply_message(event.reply_token, message)
 
-import os
+
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
