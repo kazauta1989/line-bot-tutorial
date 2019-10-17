@@ -10,6 +10,7 @@ from events.about_us import about_us_event
 from line_bot_api import *
 from events.location import location_event
 from events.contact import contact_event
+from events.appointment import appointment_event
 
 app = Flask(__name__)
 
@@ -47,12 +48,14 @@ def handle_message(event):
     # 當message_text等同於'＠關於我們'時，會回傳line_bot_api.reply_message(）裡的值
     # 另外，當有用到TextSendMessage、ImageSendMessage、VideoSendMessage、等等...
     # 多個Message objects時，要記得用成陣列，才會一次訊息同時送出
-    if message_text == '＠關於我們':
+    if message_text == '關於我們':
         about_us_event(event)
-    elif message_text == '＠地址':
+    elif message_text == '地址':
         location_event(event)
-    elif message_text == '＠聯絡我們':
+    elif message_text == '聯絡我們':
         contact_event(event)
+    elif message_text == '立即預訂':
+        appointment_event(event)
 
 
 if __name__ == "__main__":
