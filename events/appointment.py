@@ -63,3 +63,29 @@ def appointment_event(event):
             carousel_template_message
         ]
     )
+
+
+# 那這邊會採用ImageCarouselTemplate，讓使用者點選圖片接著進行預約時間的動作
+def appointment_datetime_event(event):
+    image_carousel_template_message = TemplateSendMessage(
+        alt_text='ImageCarousel template',
+        template=ImageCarouselTemplate(
+            columns=[
+                ImageCarouselColumn(
+                    image_url='https://i.imgur.com/0uII70Z.jpg',
+                    action=PostbackAction(
+                        label='postback1',
+                        display_text='postback text1',
+                        data='action=buy&itemid=1'
+                    )
+                )
+            ]
+        )
+    )
+
+    line_bot_api.reply_message(
+        reply_token=event.reply_token,
+        messages=[
+            image_carousel_template_message
+        ]
+    )

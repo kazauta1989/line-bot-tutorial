@@ -1,5 +1,7 @@
 # import 所需套件
 from flask import Flask, request, abort
+# import
+from urllib.parse import parse_qsl
 
 import os
 
@@ -11,6 +13,7 @@ from line_bot_api import *
 from events.location import location_event
 from events.contact import contact_event
 from events.appointment import appointment_event
+from events.appointment import appointment_datetime_event
 
 app = Flask(__name__)
 
@@ -56,6 +59,25 @@ def handle_message(event):
         contact_event(event)
     elif message_text == '立即預訂':
         appointment_event(event)
+
+
+# 前面的@handler.add主要是處理MessageEvent，接收純文字訊息
+# 那現在預約功能會需要接收使用者所選的服務項目，所以需要用另外一個@handler，用postback這個@handler，
+# 因為我們在appointment.py裡是使用PostbackAction，我們要取得其裡面的data
+@handler.add(PostbackEvent)
+def handler_postback(event):
+    # 我們需要把拿到的data字串轉換成字典，那我們會使用urllib裡的prase_qsl
+    # prase_qsl可以解析一個query字串把它轉換成一個list
+    # 那list如果要轉換成字典，在前面加上dict即可
+    # 有了字典就可以針對action和server去取得資料（action和server是自定義宣告的，可以做更換）
+    data = dict(parse_qsl(event.postback.data))
+    action_data = data.get('action')
+    service_data = data.get('service')
+
+    # 接著就是做判斷，判斷我們的action等於什麼，然後做什麼事
+    # 那我們這邊判斷如果等於step2，我們就做預約的動作
+    if action_data == 'step2':
+        appointment_datetime_event(event)
 
 
 if __name__ == "__main__":
