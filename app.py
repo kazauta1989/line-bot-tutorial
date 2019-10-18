@@ -12,7 +12,7 @@ from events.about_us import about_us_event
 from line_bot_api import *
 from events.location import location_event
 from events.contact import contact_event
-from events.appointment import appointment_event, appointment_datetime_event, appointment_complete_event
+from events.appointment import appointment_event, appointment_datetime_event, appointment_completed_event
 
 app = Flask(__name__)
 
@@ -78,7 +78,7 @@ def handler_postback(event):
     if action_data == 'step2':
         appointment_datetime_event(event)
     elif action_data == 'step3':
-        appointment_complete_event(event)
+        appointment_completed_event(event)
 
 
 if __name__ == "__main__":

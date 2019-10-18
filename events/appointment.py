@@ -123,12 +123,12 @@ def appointment_datetime_event(event):
     )
 
 
-def appointment_complete_event(event):
+def appointment_completed_event(event):
     # 跟之前一樣，取得service的資料
     appointment_service = dict(parse_qsl(event.postback.data)).get('service')
     # 取得datetime資料，這邊要轉換成datetime物件
     # 這邊使用datime的strptime將原本的時間轉換成dateime的物件型態
-    appointment_datetime = datetime.datetime.strptime(event.postback.data.get('datetime')), '%Y-%m-%dT%H:%M'
+    appointment_datetime = datetime.datetime.strptime(event.postback.params.get('datetime'), '%Y-%m-%dT%H:%M')
 
     # 接下來要取得使用者的lineID名稱，可以在sdk上尋找source 會有user_id可以用
     # 接著搜尋一下 get_profile 相關文件 可以使用
@@ -139,7 +139,7 @@ def appointment_complete_event(event):
 
     # 回傳訊息告訴使用者預約已完成
     appointment_service_text = '謝謝 {name}~ 您已預訂{service}'.format(name=profile_name, service=appointment_service)
-    appointment_datetime_text = appointment_datetime.strtime('您的預約日期為 %Y-%m-%d %H:%M')
+    appointment_datetime_text = appointment_datetime.strftime('您的預約日期為 %Y-%m-%d %H:%M')
 
     line_bot_api.reply_message(
         reply_token=event.reply_token,
