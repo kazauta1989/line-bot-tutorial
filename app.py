@@ -13,8 +13,21 @@ from line_bot_api import *
 from events.location import location_event
 from events.contact import contact_event
 from events.appointment import appointment_event, appointment_datetime_event, appointment_completed_event
+from database import db_session, init_db
 
 app = Flask(__name__)
+
+
+# 在第一次接觸到請求之後，就會初始資料庫
+@app.before_first_request
+def init():
+    init_db()
+
+
+# 這個function可以讓我們在flask每一次request結束之後，或是server關閉之後，能夠正確的關閉database的連結
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 
 
 # 監聽所有來自 /callback 的 Post Request
