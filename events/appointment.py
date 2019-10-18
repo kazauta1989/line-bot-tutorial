@@ -126,8 +126,9 @@ def appointment_datetime_event(event):
 def appointment_complete_event(event):
     # 跟之前一樣，取得service的資料
     appointment_service = dict(parse_qsl(event.postback.data)).get('service')
-    # 取得datetime資料，這邊不用轉換格式，後面要用到時再轉換即可
-    appointment_datetime = event.postback.data.get('datetime')
+    # 取得datetime資料，這邊要轉換成datetime物件
+    # 這邊使用datime的strptime將原本的時間轉換成dateime的物件型態
+    appointment_datetime = datetime.datetime.strptime(event.postback.data.get('datetime')), '%Y-%m-%dT%H:%M'
 
     # 接下來要取得使用者的lineID名稱，可以在sdk上尋找source 會有user_id可以用
     # 接著搜尋一下 get_profile 相關文件 可以使用
