@@ -12,9 +12,7 @@ from events.about_us import about_us_event
 from line_bot_api import *
 from events.location import location_event
 from events.contact import contact_event
-from events.appointment import appointment_event
-from events.appointment import appointment_datetime_event
-from events.appointment import appointment_complete_event
+from events.appointment import appointment_event, appointment_datetime_event, appointment_complete_event
 
 app = Flask(__name__)
 

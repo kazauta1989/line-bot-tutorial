@@ -126,8 +126,28 @@ def appointment_datetime_event(event):
 def appointment_complete_event(event):
     # 跟之前一樣，取得service的資料
     appointment_service = dict(parse_qsl(event.postback.data)).get('service')
-    # 取得datetime資料，這邊不用轉換格式，直接取得即可
+    # 取得datetime資料，這邊不用轉換格式，後面要用到時再轉換即可
     appointment_datetime = event.postback.data.get('datetime')
 
-    print(appointment_service)
-    print(appointment_datetime)
+    # 接下來要取得使用者的lineID名稱，可以在sdk上尋找source 會有user_id可以用
+    # 接著搜尋一下 get_profile 相關文件 可以使用
+    # https://developers.line.biz/en/reference/messaging-api/#get-profile
+
+    # 拿到使用者的lineID，並透過line_bot_api 取得 get_profile 之後再取得裡面的name，最後再存到profile_name
+    profile_name = line_bot_api.get_profile(event.source.user_id).display_name
+
+    # 回傳訊息告訴使用者預約已完成
+    appointment_service_text = '謝謝 {name}~ 您已預訂{service}'.format(name=profile_name, service=appointment_service)
+    appointment_datetime_text = appointment_datetime.strtime('您的預約日期為 %Y-%m-%d %H:%M')
+
+    line_bot_api.reply_message(
+        reply_token=event.reply_token,
+        messages=[
+            TextSendMessage(
+                text=appointment_service_text
+            ),
+            TextSendMessage(
+                text=appointment_datetime_text
+            )
+        ]
+    )
