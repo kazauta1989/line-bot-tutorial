@@ -121,3 +121,13 @@ def appointment_datetime_event(event):
             image_carousel_template_message
         ]
     )
+
+
+def appointment_complete_event(event):
+    # 跟之前一樣，取得service的資料
+    appointment_service = dict(parse_qsl(event.postback.data)).get('service')
+    # 取得datetime資料，這邊不用轉換格式，直接取得即可
+    appointment_datetime = event.postback.data.get('datetime')
+
+    print(appointment_service)
+    print(appointment_datetime)

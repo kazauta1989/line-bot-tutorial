@@ -14,6 +14,7 @@ from events.location import location_event
 from events.contact import contact_event
 from events.appointment import appointment_event
 from events.appointment import appointment_datetime_event
+from events.appointment import appointment_complete_event
 
 app = Flask(__name__)
 
@@ -78,6 +79,8 @@ def handler_postback(event):
     # 那我們這邊判斷如果等於step2，我們就做預約的動作
     if action_data == 'step2':
         appointment_datetime_event(event)
+    elif action_data == 'step3':
+        appointment_complete_event(event)
 
 
 if __name__ == "__main__":
