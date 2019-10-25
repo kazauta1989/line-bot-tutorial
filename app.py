@@ -8,11 +8,13 @@ import os
 # 從 events.about_us import about_us_event 到 app.py
 # 從 line_bot_api import 全部到 app.py
 # 後面一樣
-from events.about_us import about_us_event
+
 from line_bot_api import *
+from events.about_us import about_us_event
 from events.location import location_event
 from events.contact import contact_event
 from events.appointment import appointment_event, appointment_datetime_event, appointment_completed_event
+from events.quick_reply import quick_reply_event
 from database import db_session, init_db
 
 app = Flask(__name__)
@@ -71,6 +73,8 @@ def handle_message(event):
         contact_event(event)
     elif message_text == '立即預訂':
         appointment_event(event)
+    elif message_text == 'test':
+        quick_reply_event(event)
 
 
 # 前面的@handler.add主要是處理MessageEvent，接收純文字訊息
