@@ -96,6 +96,8 @@ def handler_postback(event):
         appointment_datetime_event(event)
     elif action_data == 'step3':
         appointment_completed_event(event)
+    elif action_data == 'step4':
+        appointment_datetime_event(event)
 
 
 if __name__ == "__main__":
